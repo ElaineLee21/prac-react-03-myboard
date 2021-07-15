@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import { useDispatch, useSelector } from "react-redux";
+import { loadBoardFB } from "./redux/modules/board";
 
 const List = (props) => {
-  const board = useSelector((state) => state.board);
-  console.log(board);
+  const dispatch = useDispatch();
+  const board = useSelector((state) => state.board.board);
+
+  useEffect(() => {
+    dispatch(loadBoardFB());
+  }, [dispatch]);
 
   return (
     <>
@@ -37,40 +42,21 @@ const List = (props) => {
               <th>글제목</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody style={{ cursor: "pointer" }}>
             {board.map((memo, idx) => {
               return (
                 <tr
-                  key={idx}
+                  key={board.length - idx}
                   onClick={() => {
-                    props.history.push("/detail");
+                    props.history.push("/detail/" + idx);
                   }}
                 >
-                  <td>{idx}</td>
+                  <td>{board.length - idx}</td>
                   <td>{memo.author}</td>
                   <td>{memo.title}</td>
                 </tr>
               );
             })}
-
-            <tr
-              onClick={() => {
-                props.history.push("/detail");
-              }}
-            >
-              <td>1</td>
-              <td>Mark</td>
-              <td>Otto</td>
-            </tr>
-            <tr
-              onClick={() => {
-                props.history.push("/detail");
-              }}
-            >
-              <td>2</td>
-              <td>Jacob</td>
-              <td>Thornton</td>
-            </tr>
           </tbody>
         </Table>
       </TableContainer>

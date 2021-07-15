@@ -2,29 +2,29 @@ import React from "react";
 import styled from "styled-components";
 import Button from "react-bootstrap/Button";
 import { useDispatch } from "react-redux";
-import { createMemoFB } from "./redux/modules/board";
+import { updateMemoFB } from "./redux/modules/board";
 
-const Write = ({ history }) => {
+const Edit = (props) => {
   const dispatch = useDispatch();
   const author = React.useRef();
   const title = React.useRef();
   const content = React.useRef();
+  const idx = parseInt(props.match.params.idx);
 
-  const addMemo = () => {
+  const editMemo = () => {
     let memo = {
       author: author.current.value,
       title: title.current.value,
       content: content.current.value,
-      time: Date.now(),
     };
-    dispatch(createMemoFB(memo));
-    history.push("/");
-    console.log(memo);
+    dispatch(updateMemoFB(memo, idx));
+    props.history.push("/");
   };
 
   return (
     <>
       <Container>
+        <h1>메모 수정하기</h1>
         <Input type="text" placeholder="제목을 입력하세요" ref={title}></Input>
         <Input
           type="text"
@@ -34,8 +34,8 @@ const Write = ({ history }) => {
         <Textarea placeholder="내용을 입력하세요" ref={content}></Textarea>
         <ButtonStyle>
           <p>
-            <Button variant="primary" onClick={addMemo}>
-              메모하기
+            <Button variant="primary" onClick={editMemo}>
+              수정완료
             </Button>
           </p>
         </ButtonStyle>
@@ -71,4 +71,4 @@ const ButtonStyle = styled.div`
   margin: 10px auto;
 `;
 
-export default Write;
+export default Edit;
